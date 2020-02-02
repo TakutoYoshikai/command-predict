@@ -8,38 +8,43 @@ import json
 model = keras.models.load_model("model_lstm.h5", compile=False)
 model.load_weights("model_lstm_weight.h5", by_name=False)
 
-f = open("commands.json", "r")
-s_c = json.load(f)
-i_c = dict((int(s), c) for s, c in s_c.items())
-c_i = dict((c, int(s)) for s, c in s_c.items())
+f = open("input_commands.json", "r")
+input_s_c = json.load(f)
+input_i_c = dict((int(s), c) for s, c in input_s_c.items())
+input_c_i = dict((c, int(s)) for s, c in input_s_c.items())
 
-x = [
-"git status",
-"git add titan.go",
-]
+
+f2 = open("next_commands.json", "r")
+next_s_c = json.load(f2)
+next_i_c = dict((int(s), c) for s, c in next_s_c.items())
+next_c_i = dict((c, int(s)) for s, c in next_s_c.items())
+
+def is_predictable(cmds):
+    for cmd in cmds:
+        if cmd not in input_c_i:
+            return False
+    return True
 
 def predict(cmds):
-    x = list(map(lambda a: a.split(" ")[0], x))
-    x = list(map(lambda a: makevec(c_i[a], 88),x))
+    if !is_predictable(cmds):
+        return None
+    x = list(map(lambda a: makevec(input_c_i[a], len(input_i_c)),cmds))
     x = np.array(x)
     x = x.reshape(1, x.shape[0], x.shape[1])
     predict = model.predict(x)
-    i_c[softmax(predict)[0]]
+    return next_i_c[get_index_from_vec(predict)[0]]
+
+    
 def makevec(i, n):
     res = []
     for j in range(n):
         res.append(0)
     res[i] = 1
     return res
-def vectoi(vec):
-    for i in range(len(vec)):
-        if i == 1:
-            return i
-    return None
 
 def get_index_from_vec(vec):
-    cdi = c_i["cd"]
-    lsi = c_i["ls"]
+    cdi = next_c_i["cd"]
+    lsi = next_c_i["ls"]
     y = vec[0]
     index = -1
     maxval = 0

@@ -1,3 +1,5 @@
 commands.json
+next_commands.json
+input_commands.json
 model_lstm.h5
 model_lstm_weight.h5
