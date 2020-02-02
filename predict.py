@@ -26,7 +26,7 @@ def is_predictable(cmds):
     return True
 
 def predict(cmds):
-    if !is_predictable(cmds):
+    if not is_predictable(cmds):
         return None
     x = list(map(lambda a: makevec(input_c_i[a], len(input_i_c)),cmds))
     x = np.array(x)
@@ -54,3 +54,19 @@ def get_index_from_vec(vec):
             index = i
     return (index, maxval)
 
+import http.server as s
+
+class Handler(s.BaseHTTPRequestHandler):
+    def do_POST(self):
+        content_len  = int(self.headers.get("content-length"))
+        body = json.loads(self.rfile.read(content_len).decode('utf-8'))
+        res = predict([body[0], body[1]])
+        self.send_response(200)
+        self.send_header('Content-type', 'application/json;charset=utf-8')
+        self.end_headers()
+        self.wfile.write(res.encode("utf-8"))
+
+host = "0.0.0.0"
+port = 3333
+httpd = s.HTTPServer((host, port), Handler)
+httpd.serve_forever()
