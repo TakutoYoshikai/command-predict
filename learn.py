@@ -16,7 +16,7 @@ def get_commands(lines):
     commands = []
     for line in lines:
         command = line[:-1]
-        if command[-1] == " ":
+        if command is not "" and command[-1] == " ":
             command = command[:-1]
         commands.append(command)
     return commands
@@ -48,7 +48,6 @@ step = 1
 lines = get_bash_history()
 commands = get_commands(lines)
 input_commands, next_commands = prepare_dataset(commands, maxlen)
-print(next_commands)
 input_command_list = make_input_command_list(input_commands)
 next_command_list = make_next_command_list(next_commands)
 
