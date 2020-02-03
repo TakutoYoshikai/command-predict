@@ -25,7 +25,7 @@ def get_commands(lines):
         commands.append(command)
     return commands
 
-def prepare_dataset(commands, maxlen, step):
+def make_dataset(commands, maxlen, step):
     input_commands = []
     next_commands = []
     for i in range(0, len(commands) - maxlen, step):
@@ -33,7 +33,7 @@ def prepare_dataset(commands, maxlen, step):
         next_commands.append(commands[i + maxlen].split(" ")[0])
     return (input_commands, next_commands)
 
-def prepare_param_dataset(commands, maxlen, step):
+def make_param_dataset(commands, maxlen, step):
     input_commands = []
     params = []
     for i in range(0, len(commands) - maxlen, step):
@@ -71,7 +71,7 @@ commands = get_commands(lines)
 def learn_commands():
     maxlen = 2
     step = 1
-    input_commands, next_commands = prepare_dataset(commands, maxlen, step)
+    input_commands, next_commands = make_dataset(commands, maxlen, step)
     input_command_list = make_input_command_list(input_commands)
     next_command_list = make_next_command_list(next_commands)
     input_c_i, input_i_c = make_command_dicts(input_command_list)
@@ -98,7 +98,7 @@ def learn_commands():
 def learn_params():
     maxlen = 2
     step = 1
-    input_commands, params = prepare_param_dataset(commands, maxlen, step)
+    input_commands, params = make_param_dataset(commands, maxlen, step)
     input_command_list = make_input_command_list(input_commands)
     param_list = make_param_list(params)
     input_c_i, input_i_c = make_command_dicts(input_command_list)
