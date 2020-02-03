@@ -3,3 +3,7 @@ next_commands.json
 input_commands.json
 model_lstm.h5
 model_lstm_weight.h5
+model_lstm_param.h5
+model_lstm_param_weight.h5
+params.json
+params_input.json
